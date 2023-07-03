@@ -18,6 +18,9 @@ with open("main.kts") as kts:
       name = kslp[1]
       typ = kslp[4]
       value = kslp[6]
+      if name in variables or name in constants:
+        stderr.write(f"""Error code: NO_RECREATING_CATS<{name}>""")
+        break
       if typ == "int":
         value = int(value)
       elif typ == "float":
@@ -36,6 +39,9 @@ with open("main.kts") as kts:
       name = kslp[1]
       typ = kslp[4]
       value = kslp[6]
+      if name in variables or name in constants:
+        stderr.write(f"""Error code: NO_RECREATING_CATS<{name}>""")
+        break
       if value == "!var":
         varval = kslp[7]
         if varval in variables:

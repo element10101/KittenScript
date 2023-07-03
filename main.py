@@ -1,7 +1,9 @@
 from sys import stderr
+from replit import db
 
 variables = {}
 constants = {}
+imports = []
 
 with open("main.kts") as kts:
   kts = kts.read()
@@ -51,6 +53,7 @@ with open("main.kts") as kts:
         elif typ == "string":
           value = str(value)
       constants[name] = value
+      continue
     elif ksl.startswith("set"):
       """
       Set an existing variable to a new value.
@@ -74,3 +77,19 @@ with open("main.kts") as kts:
         variables[name] = value
       else:
         stderr.write(f"""Error code: LOST_CAT<{varval}>""")
+        break
+      continue
+    elif ksl.startswith("require"):
+      """
+      Import a builtin module.
+
+      Syntax: `require <module>`
+      """
+      kslp = ksl.split()
+      module = kslp[1]
+      if module in ["io", "db"]:
+        imports.append(module)
+        continue
+      else:
+        stderr.write(f"""Error code: UNKNOWN_FAT_CAT<{module}>""")
+        break

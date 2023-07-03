@@ -20,7 +20,7 @@ with open("main.kts") as kts:
         value = int(value)
       elif type == "float":
         value = float(value)
-      elif type == "str":
+      elif type == "string":
         value = str(value)
       variables[name] = value
       continue
@@ -48,7 +48,7 @@ with open("main.kts") as kts:
           value = int(value)
         elif type == "float":
           value = float(value)
-        elif type == "str":
+        elif type == "string":
           value = str(value)
       constants[name] = value
     elif ksl.startswith("set"):

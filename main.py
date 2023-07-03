@@ -14,13 +14,13 @@ with open("main.kts") as kts:
       """
       kslp = ksl.split()
       name = kslp[1]
-      type = kslp[4]
+      typ = kslp[4]
       value = kslp[6]
-      if type == "int":
+      if typ == "int":
         value = int(value)
-      elif type == "float":
+      elif typ == "float":
         value = float(value)
-      elif type == "string":
+      elif typ == "string":
         value = str(value)
       variables[name] = value
       continue
@@ -32,7 +32,7 @@ with open("main.kts") as kts:
       """
       kslp = ksl.split()
       name = kslp[1]
-      type = kslp[4]
+      typ = kslp[4]
       value = kslp[6]
       if value == "!var":
         varval = kslp[7]
@@ -44,11 +44,11 @@ with open("main.kts") as kts:
           stderr.write(f"""Error code: LOST_CAT<{varval}>""")
           break
       else:
-        if type == "int":
+        if typ == "int":
           value = int(value)
-        elif type == "float":
+        elif typ == "float":
           value = float(value)
-        elif type == "string":
+        elif typ == "string":
           value = str(value)
       constants[name] = value
     elif ksl.startswith("set"):
@@ -60,11 +60,17 @@ with open("main.kts") as kts:
       kslp = ksl.split()
       name = kslp[1]
       value = kslp[3]
-      type = kslp[6]
+      typ = kslp[6]
       if name in constants:
         stderr.write(f"""Error code: UNMODIFIABLE_LION<{name}>""")
         break
       elif name in variables:
-        pass
+        if typ == "int":
+          value = int(value)
+        elif typ == "float":
+          value = float(value)
+        elif typ == "string":
+          value = str(value)
+        variables[name] = value
       else:
         stderr.write(f"""Error code: LOST_CAT<{varval}>""")

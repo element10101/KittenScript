@@ -5,7 +5,7 @@ variables = {}
 constants = {}
 
 def execute_ktsl(text):
-  for ksl in kts:
+  for ksl in text:
     if ksl.startswith("let"):
       """
       Create a variable.
@@ -115,6 +115,13 @@ def execute_ktsl(text):
       Syntax: `clear`
       """
       system("clear")
+    elif ksl.startswith("view"):
+      """
+      Go to a certain line and check the conditional on that line.
+
+      Syntax: `view <line>`
+      """
+      lin = text[int(ksl.split()[1]) - 1]
 
 with open("main.kts") as kts:
   kts = kts.read()

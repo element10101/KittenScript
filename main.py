@@ -1,10 +1,10 @@
 from sys import stderr
+from os import system
 
 variables = {}
 constants = {}
 
-with open("main.kts") as kts:
-  kts = kts.read()
+def execute_ktsl(text):
   for ksl in kts:
     if ksl.startswith("let"):
       """
@@ -108,3 +108,14 @@ with open("main.kts") as kts:
       else:
         print(printed.replace("!new!", "\n"))
       continue
+    elif ksl.startswith("clear"):
+      """
+      Clear the console.
+
+      Syntax: `clear`
+      """
+      system("clear")
+
+with open("main.kts") as kts:
+  kts = kts.read()
+  execute_ktsl(kts)

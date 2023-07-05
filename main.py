@@ -1,9 +1,7 @@
 from sys import stderr
-from replit import db
 
 variables = {}
 constants = {}
-imports = []
 
 with open("main.kts") as kts:
   kts = kts.read()
@@ -27,6 +25,9 @@ with open("main.kts") as kts:
         value = float(value)
       elif typ == "string":
         value = str(value)
+      else:
+        stderr.write(f"""Error code: INVALID_SHELTER<{typ}>""")
+        break
       variables[name] = value
       continue
     elif ksl.startswith("const"):
@@ -80,22 +81,30 @@ with open("main.kts") as kts:
           value = float(value)
         elif typ == "string":
           value = str(value)
+        else:
+          stderr.write(f"""Error code: INVALID_SHELTER<{typ}>""")
+          break
         variables[name] = value
       else:
         stderr.write(f"""Error code: LOST_CAT<{varval}>""")
         break
       continue
-    elif ksl.startswith("require"):
+    elif ksl.startswith("print"):
       """
-      Import a builtin module.
+      Print text to the console.
 
-      Syntax: `require <module>`
+      Syntax: `print <text>`
       """
-      kslp = ksl.split()
-      module = kslp[1]
-      if module in ["io", "db"]:
-        imports.append(module)
-        continue
+      printed = ksl[6:-1] + ksl[-1]
+      if printed.startswith("!var"):
+        var = printed.split()[1]
+        if var in variables:
+          print(str(variables[var]))
+        elif var in constants:
+          print(str(constants[var]))
+        else:
+          stderr.write(f"""Error code: LOST_CAT<{var}>""")
+          break
       else:
-        stderr.write(f"""Error code: UNKNOWN_FAT_CAT<{module}>""")
-        break
+        print(printed.replace("!new!", "\n"))
+      continue

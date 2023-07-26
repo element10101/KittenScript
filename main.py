@@ -5,6 +5,7 @@ variables = {}
 constants = {}
 
 def execute_ktsl(text):
+  text = text.split("\n")
   for ksl in text:
     if ksl.startswith("let"):
       """
@@ -123,6 +124,6 @@ def execute_ktsl(text):
       """
       lin = text[int(ksl.split()[1]) - 1]
 
-with open("main.kts") as kts:
+with open("main.kitten") as kts:
   kts = kts.read()
   execute_ktsl(kts)

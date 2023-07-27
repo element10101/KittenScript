@@ -3,10 +3,26 @@ from os import system
 
 variables = {}
 constants = {}
+inIf = "" # To handle if/else logic
 
 def execute_ktsl(text):
+  global variables, constants, inIf
+  
   text = text.split("\n")
+  curline = 0
+    
   for ksl in text:
+    ksl = ksl.strip()
+
+    # Handle if logic
+    if inIf != "":
+      if ksl == "endif":
+        inIf = ""
+      else:
+        itxt = inIf.split()
+        if len(itxt) == 3 and itxt[2] == "exists":
+          if itxt[1] in variables or itxt[1] in constants: pass
+          else: continue
     if ksl.startswith("let"):
       """
       Create a variable.
@@ -108,7 +124,6 @@ def execute_ktsl(text):
           break
       else:
         print(printed.replace("!new!", "\n"))
-      continue
     elif ksl.startswith("clear"):
       """
       Clear the console.
@@ -116,13 +131,9 @@ def execute_ktsl(text):
       Syntax: `clear`
       """
       system("clear")
-    elif ksl.startswith("view"):
-      """
-      Go to a certain line and check the conditional on that line.
-
-      Syntax: `view <line>`
-      """
-      lin = text[int(ksl.split()[1]) - 1]
+    elif ksl.startswith("if"):
+      inIf = text[curline]
+      
 
 with open("main.kitten") as kts:
   kts = kts.read()

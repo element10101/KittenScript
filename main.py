@@ -1,5 +1,4 @@
-from sys import stderr
-from os import system
+from sys import stderraf
 
 variables = {}
 constants = {}
@@ -14,6 +13,9 @@ def execute_ktsl(text):
   for ksl in text:
     ksl = ksl.strip()
 
+    # Comments
+    if ksl.startswith("#"): continue
+
     # Handle if logic
     if inIf != "":
       if ksl == "endif":
@@ -24,11 +26,6 @@ def execute_ktsl(text):
           if itxt[1] in variables or itxt[1] in constants: pass
           else: continue
     if ksl.startswith("let"):
-      """
-      Create a variable.
-
-      Syntax: `let <variable> of type <type> be <value>`
-      """
       kslp = ksl.split()
       name = kslp[1]
       typ = kslp[4]
@@ -48,11 +45,6 @@ def execute_ktsl(text):
       variables[name] = value
       continue
     elif ksl.startswith("const"):
-      """
-      Create a constant variable.
-
-      Syntax: `const <variable> of type <type> is <value>`
-      """
       kslp = ksl.split()
       name = kslp[1]
       typ = kslp[4]
@@ -79,11 +71,6 @@ def execute_ktsl(text):
       constants[name] = value
       continue
     elif ksl.startswith("set"):
-      """
-      Set an existing variable to a new value.
-
-      Syntax: `set <variable> to <value> with type <type>`
-      """
       kslp = ksl.split()
       name = kslp[1]
       value = kslp[3]
@@ -107,11 +94,6 @@ def execute_ktsl(text):
         break
       continue
     elif ksl.startswith("print"):
-      """
-      Print text to the console.
-
-      Syntax: `print <text>`
-      """
       printed = ksl[6:-1] + ksl[-1]
       if printed.startswith("!var"):
         var = printed.split()[1]
@@ -125,16 +107,10 @@ def execute_ktsl(text):
       else:
         print(printed.replace("!new!", "\n"))
     elif ksl.startswith("clear"):
-      """
-      Clear the console.
-
-      Syntax: `clear`
-      """
-      system("clear")
+      print("\033[H\033[2J", end="", flush=True)
     elif ksl.startswith("if"):
       inIf = text[curline]
       
 
-with open("main.kitten") as kts:
-  kts = kts.read()
-  execute_ktsl(kts)
+with open("main.kitten") as file:
+  execute_ktsl(file.read())
